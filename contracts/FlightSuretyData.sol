@@ -1,4 +1,4 @@
-pragma solidity >=0.4.25;
+pragma solidity ^ 0.5 .8;
 
 // import "../node_modules/openzeppelin-solidity/contracts/math/SafeMath.sol";
 import "../node_modules/@openzeppelin/contracts/math/SafeMath.sol";
@@ -227,7 +227,6 @@ contract FlightSuretyData {
         insuranceCredited[flightKey] = true;
         emit InsuranceCreditAvailable(airlineAddress, flight);
     }
-    
 
     /**
      *  @dev Transfers eligible payout funds to insuree
@@ -255,13 +254,23 @@ contract FlightSuretyData {
                 (   
                     address airlineAddress
                 )
-                public
+                external
                 payable
                 requireIsCallerAuthorized
     {
-        airlines[airlineAddress].fund = airlines[airlineAddress].fund.add(msg.value);
+        addFund(airlineAddress, msg.value);
         airlines[airlineAddress].isFunded = true;
         emit AirlineFunded(airlineAddress, msg.value);
+    }
+
+    function addFund
+                    (
+                        address airlineAddress,
+                        uint256 fundAmount
+                    )
+                    private
+    {
+        airlines[airlineAddress].fund = airlines[airlineAddress].fund.add(fundAmount);
     }
 
     function isAirlineRegistered
@@ -366,7 +375,7 @@ contract FlightSuretyData {
                 payable 
                 requireIsAirlineRegistered
     {
-        fund(msg.sender);
+        addFund(msg.sender, msg.value);
         airlines[msg.sender].isFunded = true;
         emit AirlineFunded(msg.sender, msg.value);
     }

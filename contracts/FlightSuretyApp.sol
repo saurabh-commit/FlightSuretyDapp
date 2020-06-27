@@ -1,4 +1,5 @@
-pragma solidity >=0.4.25;
+// pragma solidity >=0.4.25;
+   pragma solidity ^ 0.5 .8;
 
 // It's important to avoid vulnerabilities due to numeric overflow bugs
 // OpenZeppelin's SafeMath library, when used correctly, protects agains such bugs
@@ -150,6 +151,7 @@ contract FlightSuretyApp {
     {
         // flightSuretyData.fund(msg.sender {value: msg.value});
         flightSuretyData.fund.value(msg.value)(msg.sender);
+        // flightSuretyData.fund(airlineAddress);
     }
 
     function addVote
